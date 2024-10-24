@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Store - Inicio</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff;
+        }
+
+        @keyframes glitch {
+            0% {
+                transform: translate(0);
+            }
+            20% {
+                transform: translate(-5px, 5px);
+            }
+            40% {
+                transform: translate(-5px, -5px);
+            }
+            60% {
+                transform: translate(5px, 5px);
+            }
+            80% {
+                transform: translate(5px, -5px);
+            }
+            100% {
+                transform: translate(0);
+            }
+        }
+
+        .glitch {
+            animation: glitch 1s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+    </style>
+</head>
+<body x-data="homeData()" x-init="init()" class="min-h-screen flex flex-col">
+    <nav class="bg-gray-900 p-4 fixed w-full z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="home.html" class="text-2xl font-bold neon-text">Dark Web Store</a>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="home.html" class="hover:text-cyan-400 transition duration-300">Inicio</a></li>
+                <li><a href="products.html" class="hover:text-cyan-400 transition duration-300">Productos</a></li>
+                <li><a href="carrito.html" class="hover:text-cyan-400 transition duration-300">Carrito</a></li>
+                <li x-show="isAdmin"><a href="dashboard.html" class="hover:text-cyan-400 transition duration-300">Panel de Control</a></li>
+            </ul>
+            <div class="flex items-center space-x-4">
+                <span x-text="username" class="hidden md:inline"></span>
+                <span x-show="isAdmin" class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">ADMIN</span>
+                <button @click="logout" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 hover-glow">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-gray-900 via-cyan-900 to-gray-900 py-32 mt-16">
+        <div class="container mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-4 neon-text glitch">Bienvenido a Dark Web Store</h1>
+            <p class="text-xl mb-8 text-cyan-300">Descubre productos únicos en la web oscura</p>
+            <a href="#featured" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-8 rounded-full transition duration-300 transform hover:scale-110 hover-glow">
+                Explorar Ahora
+            </a>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto mt-16 p-4">
+        <section id="featured" class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center neon-text">Productos Destacados</h2>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <template x-for="product in featuredProducts" :key="product.id">
+                    <div class="bg-gray-800 rounded-lg overflow-hidden transform hover:scale-105 transition duration-300 hover-glow">
+                        <img :src="product.image" :alt="product.name" class="w-full h-48 object-cover">
+                        <div class="p-4">
+                            <h3 x-text="product.name" class="text-xl font-semibold mb-2 text-cyan-300"></h3>
+                            <p x-text="product.description" class="text-gray-400 mb-4"></p>
+                            <div class="flex justify-between items-center">
+                                <span x-text="'$' + product.price" class="text-lg font-bold text-green-400"></span>
+                                <button @click="addToCart(product)" class="bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition duration-300 hover-glow">
+                                    Añadir al Carrito
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </section>
+
+        <section class="mb-16">
+            <h2 class="text-3xl font-bold mb-8 text-center neon-text">Categorías</h2>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <template x-for="category in categories" :key="category">
+                    <a :href="'#' + category.toLowerCase()" class="bg-gray-800 rounded-lg p-6 text-center hover:bg-gray-700 transition duration-300 hover-glow">
+                        <span x-text="category" class="text-lg font-semibold text-cyan-300"></span>
+                    </a>
+                </template>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-900 text-center p-6">
+        <p class="text-cyan-300">&copy; 2024 Dark Web Store. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function homeData() {
+            return {
+                username: '',
+                isAdmin: false,
+                featuredProducts: [
+                    { id: 1, name: "Crypto Wallet", description: "Almacena tus criptomonedas de forma segura", price: 199.99, image: "https://via.placeholder.com/300x200.png?text=Crypto+Wallet" },
+                    { id: 2, name: "VPN Premium", description: "Navega de forma anónima y segura", price: 59.99, image: "https://via.placeholder.com/300x200.png?text=VPN+Premium" },
+                    { id: 3, name: "Encriptador de Mensajes", description: "Comunícate de forma segura", price: 39.99, image: "https://via.placeholder.com/300x200.png?text=Encriptador" },
+                ],
+                categories: ["Seguridad", "Anonimato", "Criptomonedas", "Comunicación"],
+                init() {
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const token = localStorage.getItem('token');
+                    const role = localStorage.getItem('role');
+
+                    if (!user || !token) {
+                        window.location.href = 'index.html';
+                    } else {
+                        this.username = user.username;
+                        this.isAdmin = role === 'admin';
+                    }
+                },
+                addToCart(product) {
+                    // Aquí iría la lógica para añadir al carrito
+                    alert(`Producto "${product.name}" añadido al carrito`);
+                },
+                logout() {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('role');
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

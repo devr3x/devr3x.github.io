@@ -1,0 +1,16 @@
+/* Estilo para la etiqueta Admin */
+.admin-tag {
+    background-color: #00bcd4;  /* Azul */
+    color: white;
+    padding: 2px 8px;
+    margin-left: 5px;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+/* Hover para el admin tag */
+.admin-tag:hover {
+    background-color: #0097a7; /* Azul más oscuro al hacer hover */
+}
+
