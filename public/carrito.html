@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dark Web Store - Carrito</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background-color: #0f0f0f;
+            color: #e0e0e0;
+        }
+
+        .neon-text {
+            text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff;
+        }
+
+        .neon-border {
+            box-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff, 0 0 15px #00ffff, 0 0 20px #00ffff;
+        }
+
+        .hover-glow:hover {
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff, 0 0 30px #00ffff;
+            transition: box-shadow 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
+        }
+    </style>
+</head>
+<body x-data="cartData()" x-init="init()" class="min-h-screen flex flex-col">
+    <nav class="bg-gray-900 p-4 fixed w-full z-50">
+        <div class="container mx-auto flex justify-between items-center">
+            <a href="home.html" class="text-2xl font-bold neon-text">Dark Web Store</a>
+            <ul class="hidden md:flex space-x-6">
+                <li><a href="home.html" class="hover:text-cyan-400 transition duration-300">Inicio</a></li>
+                <li><a href="products.html" class="hover:text-cyan-400 transition duration-300">Productos</a></li>
+                <li><a href="carrito.html" class="hover:text-cyan-400 transition duration-300">Carrito</a></li>
+                <li x-show="isAdmin"><a href="dashboard.html" class="hover:text-cyan-400 transition duration-300">Panel de Control</a></li>
+            </ul>
+            <div class="flex items-center space-x-4">
+                <span x-text="username" class="hidden md:inline"></span>
+                <span x-show="isAdmin" class="bg-red-600 text-white text-xs font-bold px-2 py-1 rounded">ADMIN</span>
+                <button @click="logout" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition duration-300 hover-glow">
+                    Cerrar Sesión
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <header class="bg-gradient-to-r from-gray-900 via-cyan-900 to-gray-900 py-24 mt-16">
+        <div class="container mx-auto text-center">
+            <h1 class="text-4xl font-bold mb-4 neon-text">Carrito de Compras</h1>
+            <p class="text-xl mb-8 text-cyan-300">Revisa y finaliza tu compra</p>
+        </div>
+    </header>
+
+    <main class="flex-grow container mx-auto mt-16 p-4">
+        <div x-show="cart.length === 0" class="text-center py-8 fade-in">
+            <p class="text-2xl text-cyan-300">Tu carrito está vacío</p>
+            <a href="products.html" class="mt-4 inline-block bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-2 px-4 rounded transition duration-300 hover-glow">
+                Explorar Productos
+            </a>
+        </div>
+
+        <div x-show="cart.length > 0" class="space-y-8 fade-in">
+            <ul class="space-y-4">
+                <template x-for="item in cart" :key="item.id">
+                    <li class="bg-gray-800 p-4 rounded-lg flex justify-between items-center hover-glow">
+                        <div class="flex items-center space-x-4">
+                            <img :src="item.image" :alt="item.name" class="w-16 h-16 object-cover rounded">
+                            <div>
+                                <h3 x-text="item.name" class="text-lg font-semibold text-cyan-300"></h3>
+                                <p x-text="'$' + item.price" class="text-green-400"></p>
+                            </div>
+                        </div>
+                        <button @click="removeFromCart(item.id)" class="bg-red-500 hover:bg-red-600 text-white font-bold py-1 px-3 rounded transition duration-300 hover-glow">
+                            Eliminar
+                        </button>
+                    </li>
+                </template>
+            </ul>
+            <div class="bg-gray-800 p-6 rounded-lg">
+                <div class="flex justify-between items-center mb-4">
+                    <span class="text-xl font-bold">Total:</span>
+                    <span x-text="'$' + cartTotal" class="text-2xl font-bold text-green-400"></span>
+                </div>
+                <button @click="checkout" class="w-full bg-cyan-600 hover:bg-cyan-700 text-white font-bold py-3 px-4 rounded transition duration-300 hover-glow">
+                    Proceder al Pago
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-center p-6">
+        <p class="text-cyan-300">&copy; 2024 Dark Web Store. Todos los derechos reservados.</p>
+    </footer>
+
+    <script>
+        function cartData() {
+            return {
+                username: '',
+                isAdmin: false,
+                cart: [],
+                init() {
+                    const user = JSON.parse(localStorage.getItem('user'));
+                    const token = localStorage.getItem('token');
+                    const role = localStorage.getItem('role');
+
+                    if (!user || !token) {
+                        window.location.href = 'index.html';
+                    } else {
+                        this.username = user.username;
+                        this.isAdmin = role === 'admin';
+                        this.loadCart();
+                    }
+                },
+                loadCart() {
+                    // Simular carga del carrito desde el servidor
+                    this.cart = [
+                        { id: 1, name: "Crypto Wallet", price: 199.99, image: "https://via.placeholder.com/300x200.png?text=Crypto+Wallet" },
+                        { id: 2, name: "VPN Premium", price: 59.99, image: "https://via.placeholder.com/300x200.png?text=VPN+Premium" }
+                    ];
+                },
+                get cartTotal() {
+                    return this.cart.reduce((total, item) => total + item.price, 0).toFixed(2);
+                },
+                removeFromCart(id) {
+                    this.cart = this.cart.filter(item => item.id !== id);
+                },
+                checkout() {
+                    alert('Procesando el pago...');
+                    // Aquí iría la lógica para procesar el pago
+                    this.cart = [];
+                },
+                logout() {
+                    localStorage.removeItem('user');
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('role');
+                    window.location.href = 'index.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

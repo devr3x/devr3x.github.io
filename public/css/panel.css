@@ -1,0 +1,122 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Fondo oscuro */
+    color: #f0f0f0; /* Color de texto claro */
+    margin: 0;
+    padding: 0;
+}
+
+.navbar {
+    background-color: #1e1e1e; /* Fondo de la barra de navegación */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+}
+
+.logo {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.navbar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+}
+
+.navbar ul li {
+    margin-left: 20px;
+}
+
+.navbar ul li a {
+    color: #f0f0f0; /* Enlaces claros */
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navbar ul li a:hover {
+    color: #007bff; /* Color al pasar el ratón */
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+}
+
+.profile-img {
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.admin-tag {
+    margin-left: 5px;
+    font-weight: bold;
+    color: #ffd700; /* Color dorado para el tag de admin */
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.section {
+    flex: 1;
+    margin: 0 10px;
+    padding: 20px;
+    border: 1px solid #444; /* Borde oscuro */
+    border-radius: 5px;
+    background-color: #1e1e1e; /* Fondo de secciones */
+}
+
+.section h2 {
+    margin-bottom: 20px;
+}
+
+.button {
+    padding: 10px 15px;
+    margin: 10px 0;
+    background-color: #007bff; /* Color de botón */
+    border: none;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.button:hover {
+    background-color: #0056b3; /* Color al pasar el ratón */
+}
+
+#user-list, #product-list {
+    margin-top: 10px;
+    list-style-type: none;
+    padding: 0;
+}
+
+.overlay {
+    display: none; /* Ocultar inicialmente */
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.7); /* Fondo borroso */
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal {
+    background-color: #1e1e1e;
+    padding: 20px;
+    border-radius: 8px;
+    text-align: center;
+    color: #f0f0f0;
+}
+
+#close-modal {
+    margin-top: 10px;
+}

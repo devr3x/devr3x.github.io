@@ -1,0 +1,215 @@
+/* General Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Arial', sans-serif; /* Aseguramos que Arial sea la fuente */
+}
+.slide {
+    text-align:center ;
+}
+body {
+    background-color: #1a1a1a; /* Fondo negro */
+    color: #f0f0f0; /* Texto en gris claro */
+    line-height: 1.6;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+/* Column Layout */
+.columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin: 20px 0;
+}
+
+.column {
+    flex: 1;
+    min-width: 300px;
+    background-color: #333; /* Fondo gris oscuro para cada columna */
+    padding: 20px;
+    border-radius: 10px;
+    text-align: left;
+}
+
+/* Navbar Styles */
+.navbar {
+    background-color: #333; /* Fondo gris oscuro */
+    color: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    border-bottom: 1px solid #444; /* Línea separadora */
+}
+
+.navbar .logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #f0f0f0;
+}
+
+.navbar ul {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+}
+
+.navbar ul li a {
+    color: #f0f0f0;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.navbar ul li a:hover {
+    color: #00bcd4; /* Azul brillante para hover */
+}
+
+/* User Profile Section */
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.profile-img {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+}
+
+#user-name {
+    color: #f0f0f0;
+    font-weight: 500;
+}
+
+/* Estilo para la etiqueta Admin */
+.admin-tag {
+    background-color: #00bcd4;  /* Azul */
+    color: white;
+    padding: 2px 8px;
+    margin-left: 5px;
+    font-size: 0.8rem;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+/* Hover para el admin tag */
+.admin-tag:hover {
+    background-color: #0097a7; /* Azul más oscuro al hacer hover */
+}
+
+/* Button Styles */
+.navbar button, .column button {
+    padding: 0.5rem 1rem;
+    background-color: #f44336; /* Botón rojo */
+    border: none;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    font-size: 1rem;
+    margin-top: 10px;
+}
+
+.navbar button:hover, .column button:hover {
+    background-color: #d32f2f; /* Oscurecer botón en hover */
+}
+
+/* Product List Styles */
+#product-list {
+    list-style-type: none; /* Eliminar viñetas */
+    padding: 0; /* Eliminar padding */
+}
+
+#product-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ccc; /* Línea separadora */
+}
+
+#product-list li:last-child {
+    border-bottom: none; /* Sin línea en el último elemento */
+}
+
+/* Footer */
+footer {
+    background-color: #333;
+    color: #ccc;
+    text-align: center;
+    padding: 1rem;
+    margin-top: 4rem;
+}
+
+/* Responsiveness */
+@media (max-width: 768px) {
+    .navbar ul {
+        display: flex;
+        flex-direction: column; /* Organiza verticalmente en móviles */
+        gap: 1rem;
+        padding: 1rem;
+    }
+
+    .navbar .hamburger {
+        display: block;
+        font-size: 2rem;
+    }
+
+    .container {
+        padding: 1rem;
+    }
+
+    .columns {
+        flex-direction: column; /* Cambia a columnas en vertical en pantallas pequeñas */
+    }
+}
+
+/* Login Container Styles */
+.login-container {
+    max-width: 400px;
+    margin: 100px auto;
+    padding: 20px;
+    background-color: #1f1f1f;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.login-container h1 {
+    text-align: center;
+}
+
+.login-container label {
+    display: block;
+    margin: 10px 0 5px;
+}
+
+.login-container input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.login-container button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: #ffffff;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-container button:hover {
+    background-color: #0056b3;
+}
